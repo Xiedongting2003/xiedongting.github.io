@@ -6,7 +6,7 @@ email: xiedongting1119@163.com
 description: "Personal learning sharing."
 keyword: "谢东廷的博客,Artificial Intelligence"
 url: "http://xiedongting.github.io"          # your host, for absolute URL
-baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
+baseurl: "/xiedongting.github.io"      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/Xiedongting2003/xiedongting.github.io.git" # you code repository
 
 # Sidebar settings
