@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Personal learning sharing.">
+    <meta name="keywords" content="谢东廷的博客,Artificial Intelligence">
+    <meta name="theme-color" content="#000000">
+    
+    <title>谢东廷的博客 | Xie Dongting's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Safari Webpage Icon    by-BY -->
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xie Dongting's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">关于我</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">文章</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/post-bg-desk.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>Xie Dongting's Blog</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">A journey of a thousand miles begins with a single step.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			
+<div class="post-preview">
+    <a href="/2025/05/16/paper-openreview/">
+        <h2 class="post-title">
+            新手投稿必了解系列之OpenReview
+        </h2>
+        
+        <h3 class="post-subtitle">
+            OpenReview简介及注册流程
+        </h3>
+        
+        <div class="post-content-preview">
+            前言
+
+今天终于提交了nips的正文，通过亲自投出去的这第一篇A会，我了解到了投稿的一系列流程，因此打算开个新坑，介绍我作为新手再投稿过程中了解到的一系列东西，如有不对也请大家批评指正。本篇先分享OpenReview。
+
+什么是 OpenReview？
+
+OpenReview 是一个开源平台，旨在为学术会议、期刊和研讨会提供透明且协作的同行评审服务。与传统的同行评审系统不同，OpenRevi...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 谢东廷 on May 16, 2025
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2025/05/03/LLM-RAG/">
+        <h2 class="post-title">
+            三分钟带你了解RAG
+        </h2>
+        
+        <h3 class="post-subtitle">
+            RAG的必要性、基本原理及思想
+        </h3>
+        
+        <div class="post-content-preview">
+            前言
+
+最近接近完成了一篇nips的工作，做的是LLM + RAG进行自动算法生成。通过完成这篇工作，我对RAG有了一些浅薄的认识，写在此处分享给大家。
+
+引入 RAG 的必要性
+
+传统大语言模型存在下列局限性：
+
+  
+    知识局限与幻觉：模型依赖预训练数据，知识范围受限于训练时的语料，可能生成不准确或虚构内容（即“幻觉”），尤其在处理最新信息或专业领域问题时。
+  
+  
+    时...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 谢东廷 on May 3, 2025
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/">
+        <h2 class="post-title">
+            二叉树
+        </h2>
+        
+        <h3 class="post-subtitle">
+            二叉树的基本原理及多叉树的扩展
+        </h3>
+        
+        <div class="post-content-preview">
+            本文将探讨二叉树这一数据结构的基本原理，并进一步介绍其向多叉树的扩展。二叉树和多叉树在计算机科学中广泛应用于数据库、文件系统和决策树等领域。
+
+二叉树的基本原理
+
+二叉树是一种树形数据结构，每个节点最多有两个子节点，分别称为左子节点和右子节点。其核心特点包括：
+
+
+  
+    根节点：树的顶端节点，是整个树的起点。
+  
+  
+    子节点：每个节点可以有零个、一个或两个子节点。
+  
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 谢东廷 on April 30, 2025
+    </p>
+</div>
+<hr>
+
+
+<!-- Pager -->
+
+
+    		</div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                                <a href="/tags/#%E4%B8%93%E4%B8%9A%E8%AF%BE" title="专业课" rel="1">
+                                    专业课
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构" rel="1">
+                                    数据结构
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#Nips" title="Nips" rel="2">
+                                    Nips
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#LLM" title="LLM" rel="1">
+                                    LLM
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#artificial%20intelligence" title="artificial intelligence" rel="1">
+                                    artificial intelligence
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#paper%20writing" title="paper writing" rel="1">
+                                    paper writing
+                                </a>
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr>
+<h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+                        
+                            <a href="/about">
+                                <img src="img/avatar.jpg">
+                            </a>
+                        
+                        
+                            <p>The harder you work, the luckier you are!</p>
+                        
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            <!-- add jianshu add target = "_blank" to <a> by BY -->
+                            
+                            
+                            
+                            
+                            
+                            
+                            <li>
+                                <a target="_blank" href="https://github.com/Xiedongting2003">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            
+                            
+                        </ul>
+                        
+                            <p>✉️ xiedongting1119@163.com</p>
+                        
+                    </div>
+                </section>
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="https://knight-123123.github.io/">周洲有</a></li>
+                    
+                        <li><a href="http://www.jianshu.com/u/e71990ada2fd">冯涛</a></li>
+                    
+                        <li><a href="https://github.com/hhzy133">黄子怡</a></li>
+                    
+                </ul>
+                
+    		</div>
+        
+	</div>
+</div>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <!-- add jianshu add target = "_blank" to <a> by BY -->
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/Xiedongting2003">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright © Xie Dongting's Blog 2025
+                    <br>
+                    Theme on <a href="https://github.com/Xiedongting2003/xiedongting.github.io.git">GitHub</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px" height="20px" src="https://ghbtns.com/github-btn.html?user=Xiedongting2003&repo=Xiedongting2003.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js%20"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js%20"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js%20"></script>
+
+<!-- Service Worker -->
+
+<script type="text/javascript">
+    if(navigator.serviceWorker){
+        // For security reasons, a service worker can only control the pages that are in the same directory level or below it. That's why we put sw.js at ROOT level.
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {console.log('Service Worker Registered. ', registration)})
+            .catch((error) => {console.log('ServiceWorker registration failed: ', error)})
+    }
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/ 
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers   
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/apple-touch-icon.png" width="0" height="0">
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

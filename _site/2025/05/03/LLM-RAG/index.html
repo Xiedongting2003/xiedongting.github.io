@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Personal learning sharing.">
+    <meta name="keywords" content="谢东廷的博客,Artificial Intelligence">
+    <meta name="theme-color" content="#000000">
+    
+    <title>三分钟带你了解RAG - 谢东廷的博客 | Xie Dongting's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Safari Webpage Icon    by-BY -->
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2025/05/03/LLM-RAG/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xie Dongting's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">关于我</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">文章</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-2015.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/post-bg-2015.jpg')
+    }
+
+    
+</style>
+<header class="intro-header">
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Nips" title="Nips">Nips</a>
+                        
+                        <a class="tag" href="/tags/#LLM" title="LLM">LLM</a>
+                        
+                        <a class="tag" href="/tags/#artificial%20intelligence" title="artificial intelligence">artificial intelligence</a>
+                        
+                    </div>
+                    <h1>三分钟带你了解RAG</h1>
+                    
+                    
+                    <h2 class="subheading">RAG的必要性、基本原理及思想</h2>
+                    
+                    <span class="meta">Posted by 谢东廷 on May 3, 2025</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p>最近接近完成了一篇nips的工作，做的是LLM + RAG进行自动算法生成。通过完成这篇工作，我对RAG有了一些浅薄的认识，写在此处分享给大家。</p>
+
+<h2 id="引入-rag-的必要性">引入 RAG 的必要性</h2>
+
+<p>传统大语言模型存在下列局限性：</p>
+<ul>
+  <li>
+    <p>知识局限与幻觉：模型依赖预训练数据，知识范围受限于训练时的语料，可能生成不准确或虚构内容（即“幻觉”），尤其在处理最新信息或专业领域问题时。</p>
+  </li>
+  <li>
+    <p>时效性不足：预训练知识无法动态更新，导致对实时数据的响应能力较弱。</p>
+  </li>
+  <li>
+    <p>专业场景需求：法律、医疗等领域的查询需要精准引用外部数据，而传统模型难以提供可靠依据。</p>
+  </li>
+  <li>
+    <p>计算成本：单纯扩大模型规模成本高昂，且效果提升有限。</p>
+  </li>
+  <li>
+    <p>RAG 通过结合外部知识库和检索机制，解决上述问题，为知识密集型任务提供准确、动态的解决方案。</p>
+  </li>
+</ul>
+
+<h2 id="rag-的基本原理">RAG 的基本原理</h2>
+
+<p>RAG 是一种融合信息检索和自然语言生成的框架，通过引入外部知识增强生成内容的准确性和相关性。其运作依赖三个核心组件：检索器、生成器和知识库，并通过一个系统化的工作流程将它们整合。</p>
+
+<h3 id="检索器">检索器</h3>
+
+<p>检索器的主要任务是从外部知识库中查找与用户查询语义相关的文档或信息片段。它采用基于向量的语义搜索技术，将查询和文档转化为高维向量表示，通过预训练嵌入模型捉文本的语义含义。检索器通过计算查询向量与文档向量之间的相似度（例如余弦相似度或内积）来确定相关性。为了在大型知识库中高效检索，检索器使用索引技术快速定位最相似的文档。在某些场景下，检索器可能结合稀疏检索方法以提高召回率，确保尽可能找到所有相关文档，同时通过微调嵌入模型或优化检索策略提升精确率，确保检索到的文档高度相关。检索器的性能直接影响提供给生成器的上下文质量，因此在专业领域应用中常需对嵌入模型进行特定领域数据的微调。</p>
+
+<h3 id="生成器">生成器</h3>
+
+<p>生成器通常基于大型语言模型，负责根据检索到的文档和用户查询生成自然、流畅且准确的回答。它将查询与检索到的文档拼接为输入，将文档视为额外的上下文信息。生成器通过注意力机制重点关注检索文档中的相关内容，同时综合查询的意图，生成符合语义的回答。生成器的关键在于平衡对检索文档的依赖与语言生成的灵活性：过度依赖文档可能导致回答过于机械，缺乏自然性；而忽视文档则可能引发“幻觉”，生成不准确内容。为此，生成器通常通过提示工程或在特定任务数据上微调来优化，确保既能充分利用检索到的上下文，又能生成通顺的语言输出。</p>
+
+<h3 id="知识库">知识库</h3>
+
+<p>知识库是存储外部信息的数据库，供检索器查询使用。它可以包含非结构化数据或结构化数据。为适配检索需求，知识库需预先处理，例如将文档分割为较小的片段并转化为向量表示，以支持高效的语义搜索。知识库的一个显著优势是支持动态更新，可以随时添加新信息或删除过时内容，特别适合需要实时性的应用场景，如新闻摘要或技术支持。知识库的质量和覆盖范围对 RAG 的整体性能至关重要，因此需要定期进行数据清洗、去重和结构优化，以确保文档内容的全面性和相关性。</p>
+
+<h2 id="工作流程">工作流程</h2>
+
+<p>RAG 的工作流程从用户输入查询开始，例如“2025 年 AI 技术趋势”。检索器首先通过嵌入模型将查询编码为向量表示，捕捉其语义意图。然后，检索器在知识库中搜索与查询向量最相似的 top-k 个文档（k 为可调参数，如 5 或 10），基于向量相似度排序。检索到的文档与查询拼接，形成生成器的输入，通常格式为“[CLS] 查询 [SEP] 文档1 [SEP] 文档2 …”。生成器处理这一综合输入，分析检索文档的上下文并结合查询，生成自然语言回答，可能包括对文档内容的总结或直接引用。在某些实现中，系统会对生成结果进行后处理，例如检查事实一致性或添加文档引用，以提高回答的可靠性和透明度。这一流程确保 RAG 能够利用外部知识生成准确且上下文相关的回答。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>RAG 的引入解决了传统生成模型在知识范围、时效性和准确性上的局限，通过检索器、生成器和知识库的协同工作，提供了一种高效的解决方案。其基本原理依托详细的组件设计和系统化流程，核心思想则是通过外部知识增强生成能力，同时保持模块化、可更新和高可解释性。</p>
+
+
+                <hr style="visibility: hidden;">
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/" data-toggle="tooltip" data-placement="top" title="二叉树">
+                        Previous<br>
+                        <span>二叉树</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2025/05/16/paper-openreview/" data-toggle="tooltip" data-placement="top" title="新手投稿必了解系列之OpenReview">
+                        Next<br>
+                        <span>新手投稿必了解系列之OpenReview</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                <!--Gitalk评论start  -->
+                
+                <!-- 引入Gitalk评论插件  -->
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+                <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+                <div id="gitalk-container"></div>
+                <!-- 引入一个生产md5的js，用于对id值进行处理，防止其过长 -->
+                <!-- Thank DF:https://github.com/NSDingFan/NSDingFan.github.io/issues/3#issuecomment-407496538 -->
+                <script src="/js/md5.min.js"></script>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+                    clientID: 'f2c84e7629bb1446c1a4',
+                    clientSecret: 'ca6d6139d1e1b8c43f8b2e19492ddcac8b322d0d',
+                    repo: 'xiedongting.github.io',
+                    owner: 'Xiedongting2003',
+                    admin: ['Xiedongting2003'],
+                    distractionFreeMode: true,
+                    id: md5(location.pathname),
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#%E4%B8%93%E4%B8%9A%E8%AF%BE" title="专业课" rel="1">
+                                    专业课
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构" rel="1">
+                                    数据结构
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#Nips" title="Nips" rel="2">
+                                    Nips
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#LLM" title="LLM" rel="1">
+                                    LLM
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#artificial%20intelligence" title="artificial intelligence" rel="1">
+                                    artificial intelligence
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#paper%20writing" title="paper writing" rel="1">
+                                    paper writing
+                                </a>
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="https://knight-123123.github.io/">周洲有</a></li>
+                    
+                        <li><a href="http://www.jianshu.com/u/e71990ada2fd">冯涛</a></li>
+                    
+                        <li><a href="https://github.com/hhzy133">黄子怡</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
+        // anchors.options = {
+        //   visible: 'always',
+        //   placement: 'right',
+        //   icon: '#'
+        // };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    <!-- add jianshu add target = "_blank" to <a> by BY -->
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/Xiedongting2003">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright © Xie Dongting's Blog 2025
+                    <br>
+                    Theme on <a href="https://github.com/Xiedongting2003/xiedongting.github.io.git">GitHub</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px" height="20px" src="https://ghbtns.com/github-btn.html?user=Xiedongting2003&repo=Xiedongting2003.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js%20"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js%20"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js%20"></script>
+
+<!-- Service Worker -->
+
+<script type="text/javascript">
+    if(navigator.serviceWorker){
+        // For security reasons, a service worker can only control the pages that are in the same directory level or below it. That's why we put sw.js at ROOT level.
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {console.log('Service Worker Registered. ', registration)})
+            .catch((error) => {console.log('ServiceWorker registration failed: ', error)})
+    }
+</script>
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/ 
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers   
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async('/js/jquery.tagcloud.js',function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/apple-touch-icon.png" width="0" height="0">
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
