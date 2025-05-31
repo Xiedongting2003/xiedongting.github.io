@@ -3,10 +3,10 @@
   <channel>
     <title>Xie Dongting&apos;s Blog</title>
     <description>Personal learning sharing.</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 30 May 2025 18:07:37 +0800</pubDate>
-    <lastBuildDate>Fri, 30 May 2025 18:07:37 +0800</lastBuildDate>
+    <link>http://localhost:4000/xiedongting.github.io/</link>
+    <atom:link href="http://localhost:4000/xiedongting.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 31 May 2025 11:17:40 +0800</pubDate>
+    <lastBuildDate>Sat, 31 May 2025 11:17:40 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -130,8 +130,8 @@
 &lt;p&gt;OpenReview 是一个功能强大且透明的学术评审平台，对于希望参与全球学术交流的研究人员来说是一个宝贵的工具。通过以上详细的注册流程，新手用户可以快速创建账号并开始探索平台的功能。无论是提交论文、参与评审，还是加入学术讨论，OpenReview 都为您提供了一个开放的舞台。立即注册，开启您的学术之旅吧！&lt;/p&gt;
 </description>
         <pubDate>Fri, 16 May 2025 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2025/05/16/paper-openreview/</link>
-        <guid isPermaLink="true">http://localhost:4000/2025/05/16/paper-openreview/</guid>
+        <link>http://localhost:4000/xiedongting.github.io/2025/05/16/paper-openreview/</link>
+        <guid isPermaLink="true">http://localhost:4000/xiedongting.github.io/2025/05/16/paper-openreview/</guid>
         
         <category>Nips</category>
         
@@ -192,8 +192,8 @@
 &lt;p&gt;RAG 的引入解决了传统生成模型在知识范围、时效性和准确性上的局限，通过检索器、生成器和知识库的协同工作，提供了一种高效的解决方案。其基本原理依托详细的组件设计和系统化流程，核心思想则是通过外部知识增强生成能力，同时保持模块化、可更新和高可解释性。&lt;/p&gt;
 </description>
         <pubDate>Sat, 03 May 2025 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2025/05/03/LLM-RAG/</link>
-        <guid isPermaLink="true">http://localhost:4000/2025/05/03/LLM-RAG/</guid>
+        <link>http://localhost:4000/xiedongting.github.io/2025/05/03/LLM-RAG/</link>
+        <guid isPermaLink="true">http://localhost:4000/xiedongting.github.io/2025/05/03/LLM-RAG/</guid>
         
         <category>Nips</category>
         
@@ -291,8 +291,8 @@
 &lt;p&gt;二叉树作为基础数据结构，通过其简单的二分支结构为许多算法提供了高效的实现方式。而多叉树通过扩展子节点数量，适应了更广泛的应用场景，如数据库索引和文件系统。理解这两者的原理和联系，有助于设计和优化复杂的数据结构。&lt;/p&gt;
 </description>
         <pubDate>Wed, 30 Apr 2025 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/</link>
-        <guid isPermaLink="true">http://localhost:4000/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/</guid>
+        <link>http://localhost:4000/xiedongting.github.io/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/</link>
+        <guid isPermaLink="true">http://localhost:4000/xiedongting.github.io/2025/04/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E4%BA%8C%E5%8F%89%E6%A0%91/</guid>
         
         <category>专业课</category>
         
